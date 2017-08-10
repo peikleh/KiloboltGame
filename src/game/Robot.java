@@ -21,6 +21,7 @@ package game;
  * @author nevin
  */
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class Robot {
 
@@ -41,6 +42,8 @@ public class Robot {
 
     private int speedX = 0;
     private int speedY = 1;
+
+    private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     public void update() {
 
@@ -119,7 +122,6 @@ public class Robot {
         if (isMovingRight() == true && isMovingLeft() == false) {
             moveRight();
         }
-
     }
 
     public void jump() {
@@ -127,7 +129,11 @@ public class Robot {
             speedY = JUMPSPEED;
             jumped = true;
         }
+    }
 
+    public void shoot() {
+        Projectile p = new Projectile(centerX + 50, centerY - 25);
+        projectiles.add(p);
     }
 
     public int getCenterX() {
@@ -192,6 +198,10 @@ public class Robot {
 
     public void setMovingLeft(boolean movingLeft) {
         this.movingLeft = movingLeft;
+    }
+
+    public ArrayList getProjectiles() {
+        return projectiles;
     }
 
 }

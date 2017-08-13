@@ -17,10 +17,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     private Heliboy hb, hb2;
     private Image image, currentSprite, character, character2, character3, characterDown, characterJumped, background, heliboy,
             heliboy2, heliboy3, heliboy4, heliboy5;
+    public static Image tiledirt, tileocean;
     private Graphics second;
     private URL base;
     private static Background bg1, bg2;
     private Animation anim, hanim;
+    private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 
     @Override
     public void init() {
@@ -44,17 +46,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         character = getImage(base, "data/character.png");
         character2 = getImage(base, "data/character2.png");
         character3 = getImage(base, "data/character3.png");
-
         characterDown = getImage(base, "data/down.png");
         characterJumped = getImage(base, "data/jumped.png");
-
         heliboy = getImage(base, "data/heliboy.png");
         heliboy2 = getImage(base, "data/heliboy2.png");
         heliboy3 = getImage(base, "data/heliboy3.png");
         heliboy4 = getImage(base, "data/heliboy4.png");
         heliboy5 = getImage(base, "data/heliboy5.png");
-
         background = getImage(base, "data/background.png");
+        tiledirt = getImage(base, "data/tiledirt.png");
+        tileocean = getImage(base, "data/tileocean.png");
 
         anim = new Animation();
         anim.addFrame(character, 1250);
@@ -63,14 +64,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         anim.addFrame(character2, 50);
 
         hanim = new Animation();
-        hanim.addFrame(heliboy, 100);
-        hanim.addFrame(heliboy2, 100);
-        hanim.addFrame(heliboy3, 100);
-        hanim.addFrame(heliboy4, 100);
-        hanim.addFrame(heliboy5, 100);
-        hanim.addFrame(heliboy4, 100);
-        hanim.addFrame(heliboy3, 100);
-        hanim.addFrame(heliboy2, 100);
+        hanim.addFrame(heliboy, 10);
+        hanim.addFrame(heliboy2, 10);
+        hanim.addFrame(heliboy3, 10);
+        hanim.addFrame(heliboy4, 10);
+        hanim.addFrame(heliboy5, 10);
+        hanim.addFrame(heliboy4, 10);
+        hanim.addFrame(heliboy3, 10);
+        hanim.addFrame(heliboy2, 10);
 
         currentSprite = anim.getImage();
 
@@ -81,6 +82,23 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         bg1 = new Background(0, 0);
         bg2 = new Background(2160, 0);
+
+        for (int i = 0; i < 200; i++) {
+            for (int j = 0; j < 12; j++) {
+
+                if (j == 11) {
+                    Tile t = new Tile(i, j, 2);
+                    tilearray.add(t);
+
+                }
+                if (j == 10) {
+                    Tile t = new Tile(i, j, 1);
+                    tilearray.add(t);
+
+                }
+            }
+        }
+
         robot = new Robot();
         hb = new Heliboy(340, 360);
         hb2 = new Heliboy(700, 360);
@@ -120,6 +138,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
             bg1.update();
             bg2.update();
+            updateTiles();
             hb.update();
             hb2.update();
             animate();
@@ -152,7 +171,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public void paint(Graphics g) {
         g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
         g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
-
+        paintTiles(g);
         ArrayList projectiles = robot.getProjectiles();
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile p = (Projectile) projectiles.get(i);
@@ -164,6 +183,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         g.drawImage(hanim.getImage(), hb.getCenterX() - 48, hb.getCenterY() - 48, this);
         g.drawImage(hanim.getImage(), hb2.getCenterX() - 48, hb2.getCenterY() - 48, this);
+    }
+
+    private void updateTiles() {
+
+        for (int i = 0; i < tilearray.size(); i++) {
+            Tile t = (Tile) tilearray.get(i);
+            t.update();
+        }
+
+    }
+
+    private void paintTiles(Graphics g) {
+        for (int i = 0; i < tilearray.size(); i++) {
+            Tile t = (Tile) tilearray.get(i);
+            g.drawImage(t.getTileImage(), t.getTileX(), t.getTileY(), this);
+        }
     }
 
     public void animate() {

@@ -28,26 +28,26 @@ public class Robot {
     // Constants are Here
     final int JUMPSPEED = -15;
     final int MOVESPEED = 5;
-    final int GROUND = 382;
 
     private int centerX = 100;
-    private int centerY = GROUND;
+    private int centerY = 377;
     private boolean jumped = false;
     private boolean movingLeft = false;
     private boolean movingRight = false;
     private boolean ducked = false;
-
-    private static Background bg1 = StartingClass.getBg1();
-    private static Background bg2 = StartingClass.getBg2();
+    private boolean readyToFire = true;
 
     private int speedX = 0;
-    private int speedY = 1;
+    private int speedY = 0;
+
+    private Background bg1 = StartingClass.getBg1();
+    private Background bg2 = StartingClass.getBg2();
 
     private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     public void update() {
-
         // Moves Character or Scrolls Background accordingly.
+
         if (speedX < 0) {
             centerX += speedX;
         }
@@ -60,25 +60,16 @@ public class Robot {
             centerX += speedX;
         }
         if (speedX > 0 && centerX > 200) {
-            bg1.setSpeedX(-MOVESPEED);
-            bg2.setSpeedX(-MOVESPEED);
+            bg1.setSpeedX(-MOVESPEED / 5);
+            bg2.setSpeedX(-MOVESPEED / 5);
         }
 
         // Updates Y Position
         centerY += speedY;
-        if (centerY + speedY >= GROUND) {
-            centerY = GROUND;
-        }
 
         // Handles Jumping
         if (jumped == true) {
             speedY += 1;
-
-            if (centerY + speedY >= GROUND) {
-                centerY = GROUND;
-                speedY = 0;
-                jumped = false;
-            }
 
         }
 
@@ -86,6 +77,14 @@ public class Robot {
         if (centerX + speedX <= 60) {
             centerX = 61;
         }
+    }
+
+    public boolean isReadyToFire() {
+        return readyToFire;
+    }
+
+    public void setReadyToFire(boolean readyToFire) {
+        this.readyToFire = readyToFire;
     }
 
     public void moveRight() {
@@ -122,6 +121,7 @@ public class Robot {
         if (isMovingRight() == true && isMovingLeft() == false) {
             moveRight();
         }
+
     }
 
     public void jump() {
@@ -129,11 +129,14 @@ public class Robot {
             speedY = JUMPSPEED;
             jumped = true;
         }
+
     }
 
     public void shoot() {
-        Projectile p = new Projectile(centerX + 50, centerY - 25);
-        projectiles.add(p);
+        if (readyToFire) {
+            Projectile p = new Projectile(centerX + 50, centerY - 25);
+            projectiles.add(p);
+        }
     }
 
     public int getCenterX() {
@@ -205,3 +208,4 @@ public class Robot {
     }
 
 }
+ 

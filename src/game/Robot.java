@@ -21,6 +21,7 @@ package game;
  * @author nevin
  */
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class Robot {
@@ -31,6 +32,7 @@ public class Robot {
 
     private int centerX = 100;
     private int centerY = 377;
+
     private boolean jumped = false;
     private boolean movingLeft = false;
     private boolean movingRight = false;
@@ -39,6 +41,14 @@ public class Robot {
 
     private int speedX = 0;
     private int speedY = 0;
+
+    public static Rectangle rect = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect2 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect3 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect4 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle yellowRed = new Rectangle(0, 0, 0, 0);
+    public static Rectangle footleft = new Rectangle(0, 0, 0, 0);
+    public static Rectangle footright = new Rectangle(0, 0, 0, 0);
 
     private Background bg1 = StartingClass.getBg1();
     private Background bg2 = StartingClass.getBg2();
@@ -68,15 +78,22 @@ public class Robot {
         centerY += speedY;
 
         // Handles Jumping
-        if (jumped == true) {
-            speedY += 1;
-
+        speedY += 1;
+        if (speedY > 3) {
+            jumped = true;
         }
 
         // Prevents going beyond X coordinate of 0
         if (centerX + speedX <= 60) {
             centerX = 61;
         }
+
+        rect.setRect(centerX - 34, centerY - 63, 68, 63);
+        rect2.setRect(rect.getX(), rect.getY() + 63, 68, 64);
+        rect3.setRect(rect.getX() - 26, rect.getY() + 32, 26, 20);
+        rect4.setRect(rect.getX() + 68, rect.getY() + 32, 26, 20);
+        yellowRed.setRect(centerX - 110, centerY - 110, 180, 180);
+
     }
 
     public boolean isReadyToFire() {
@@ -208,4 +225,3 @@ public class Robot {
     }
 
 }
- 

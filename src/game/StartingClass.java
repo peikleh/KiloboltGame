@@ -13,11 +13,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import KiloboltGame.framework.Animation;
+import java.awt.Font;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
 
     private static Robot robot;
-    private Heliboy hb, hb2;
+    public static Heliboy hb, hb2;
+    public static int score = 0;
+    private Font font = new Font(null, Font.BOLD, 30);
     private Image image, currentSprite, character, character2, character3,
             characterDown, characterJumped, background, heliboy, heliboy2,
             heliboy3, heliboy4, heliboy5;
@@ -68,7 +71,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         tilegrassLeft = getImage(base, "data/tilegrassleft.png");
         tilegrassRight = getImage(base, "data/tilegrassright.png");
 
-
         anim = new Animation();
         anim.addFrame(character, 1250);
         anim.addFrame(character2, 50);
@@ -103,7 +105,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         hb = new Heliboy(340, 360);
         hb2 = new Heliboy(700, 360);
-        
 
         Thread thread = new Thread(this);
         thread.start();
@@ -225,12 +226,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             g.fillRect(p.getX(), p.getY(), 10, 5);
         }
 
+        g.drawRect((int) robot.rect.getX(), (int) robot.rect.getY(), (int) robot.rect.getWidth(), (int) robot.rect.getHeight());
+        g.drawRect((int) robot.rect2.getX(), (int) robot.rect2.getY(), (int) robot.rect2.getWidth(), (int) robot.rect2.getHeight());
+        g.drawRect((int) robot.rect3.getX(), (int) robot.rect3.getY(), (int) robot.rect3.getWidth(), (int) robot.rect3.getHeight());
+        g.drawRect((int) robot.rect4.getX(), (int) robot.rect4.getY(), (int) robot.rect4.getWidth(), (int) robot.rect4.getHeight());
+
         g.drawImage(currentSprite, robot.getCenterX() - 61,
                 robot.getCenterY() - 63, this);
         g.drawImage(hanim.getImage(), hb.getCenterX() - 48,
                 hb.getCenterY() - 48, this);
         g.drawImage(hanim.getImage(), hb2.getCenterX() - 48,
                 hb2.getCenterY() - 48, this);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+        g.drawString(Integer.toString(score), 740, 30);
     }
 
     private void updateTiles() {
@@ -253,37 +262,37 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public void keyPressed(KeyEvent e) {
 
         switch (e.getKeyCode()) {
-        case KeyEvent.VK_UP:
-            System.out.println("Move up");
-            break;
+            case KeyEvent.VK_UP:
+                System.out.println("Move up");
+                break;
 
-        case KeyEvent.VK_DOWN:
-            currentSprite = characterDown;
-            if (robot.isJumped() == false) {
-                robot.setDucked(true);
-                robot.setSpeedX(0);
-            }
-            break;
+            case KeyEvent.VK_DOWN:
+                currentSprite = characterDown;
+                if (robot.isJumped() == false) {
+                    robot.setDucked(true);
+                    robot.setSpeedX(0);
+                }
+                break;
 
-        case KeyEvent.VK_LEFT:
-            robot.moveLeft();
-            robot.setMovingLeft(true);
-            break;
+            case KeyEvent.VK_LEFT:
+                robot.moveLeft();
+                robot.setMovingLeft(true);
+                break;
 
-        case KeyEvent.VK_RIGHT:
-            robot.moveRight();
-            robot.setMovingRight(true);
-            break;
+            case KeyEvent.VK_RIGHT:
+                robot.moveRight();
+                robot.setMovingRight(true);
+                break;
 
-        case KeyEvent.VK_SPACE:
-            robot.jump();
-            break;
+            case KeyEvent.VK_SPACE:
+                robot.jump();
+                break;
 
-        case KeyEvent.VK_CONTROL:
-            if (robot.isDucked() == false && robot.isJumped() == false) {
-                robot.shoot();
-            }
-            break;
+            case KeyEvent.VK_CONTROL:
+                if (robot.isDucked() == false && robot.isJumped() == false) {
+                    robot.shoot();
+                }
+                break;
 
         }
 
@@ -292,25 +301,25 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
-        case KeyEvent.VK_UP:
-            System.out.println("Stop moving up");
-            break;
+            case KeyEvent.VK_UP:
+                System.out.println("Stop moving up");
+                break;
 
-        case KeyEvent.VK_DOWN:
-            currentSprite = anim.getImage();
-            robot.setDucked(false);
-            break;
+            case KeyEvent.VK_DOWN:
+                currentSprite = anim.getImage();
+                robot.setDucked(false);
+                break;
 
-        case KeyEvent.VK_LEFT:
-            robot.stopLeft();
-            break;
+            case KeyEvent.VK_LEFT:
+                robot.stopLeft();
+                break;
 
-        case KeyEvent.VK_RIGHT:
-            robot.stopRight();
-            break;
+            case KeyEvent.VK_RIGHT:
+                robot.stopRight();
+                break;
 
-        case KeyEvent.VK_SPACE:
-            break;
+            case KeyEvent.VK_SPACE:
+                break;
 
         }
 
@@ -329,8 +338,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public static Background getBg2() {
         return bg2;
     }
-    
-    public static Robot getRobot(){
+
+    public static Robot getRobot() {
         return robot;
     }
 
